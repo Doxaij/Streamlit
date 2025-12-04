@@ -1,4 +1,14 @@
+# j'importe les bibliothèques
 import streamlit as st
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import plotly.express as px
+import time
+# Importation du module
+from streamlit_option_menu import option_menu
+from streamlit_authenticator import Authenticate
+
 st.write("Hello World")
 
 # Titre principal de l'application (affiché en haut de la page)
