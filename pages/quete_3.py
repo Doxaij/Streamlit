@@ -9,7 +9,11 @@ import time
 from streamlit_option_menu import option_menu
 from streamlit_authenticator import Authenticate
 
-
+# --- AUTHENTIFICATION OBLIGATOIRE POUR AFFICHER ---
+auth_status = st.session_state.get("authentication_status")
+if not auth_status:
+    st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
+    st.stop()
 
 
 

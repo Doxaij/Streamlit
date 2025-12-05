@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
 
+# --- AUTHENTIFICATION OBLIGATOIRE POUR AFFICHER ---
+auth_status = st.session_state.get("authentication_status")
+if not auth_status:
+    st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
+    st.stop()
+
 df = pd.read_csv(r"C:\Users\33631\Downloads\Formation\Streamlit\Partie_1\streamlit\data\taxis.csv")
 pb_liste = list(df['pickup_borough'].dropna().unique())
 

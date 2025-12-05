@@ -5,6 +5,13 @@ import pandas as pd
 import seaborn as sns
 import plotly.express as px
 
+# --- AUTHENTIFICATION OBLIGATOIRE POUR AFFICHER ---
+auth_status = st.session_state.get("authentication_status")
+if not auth_status:
+    st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
+    st.stop()
+
+
 # Je fais un peu de fioriture, texte, présentation
 st.title("Bienvenue sur le site web de Margie")
 

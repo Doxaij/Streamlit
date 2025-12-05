@@ -1,46 +1,30 @@
 # j'importe les bibliothèques
 import streamlit as st
+import streamlit_authenticator as stauth
+from streamlit_option_menu import option_menu
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import plotly.express as px
 import time
 # Importation du module
-from streamlit_option_menu import option_menu
-from streamlit_authenticator import Authenticate
 
 
-# Nos données utilisateurs doivent respecter ce format
+conn = st.connection('pets_db', type='sql')
 
-lesDonneesDesComptes = {
+# Insert some data with conn.session.
+with conn.session as s:
+    s.execute('CREATE TABLE IF NOT EXISTS pet_owners (person TEXT, pet TEXT);')
+    s.execute('DELETE FROM pet_owners;')
+    pet_owners = {'jerry': 'fish', 'barbara': 'cat', 'alex': 'puppy'}
+    for k in pet_owners:
+        s.execute(
+            'INSERT INTO pet_owners (person, pet) VALUES (:owner, :pet);',
+            params=dict(owner=k, pet=pet_owners[k])
+        )
+    s.commit()
 
-    'usernames': {
-        'utilisateur': {
-            'name': 'utilisateur',
-            'password': 'utilisateurMDP',
-            'email': 'utilisateur@gmail.com',
-            'failed_login_attemps': 0,  # Sera géré automatiquement
-            'logged_in': False,          # Sera géré automatiquement
-            'role': 'utilisateur'
-        },
-
-        'root': {
-            'name': 'root',
-            'password': 'rootMDP',
-            'email': 'admin@gmail.com',
-            'failed_login_attemps': 0,  # Sera géré automatiquement
-            'logged_in': False,          # Sera géré automatiquement
-            'role': 'administrateur'
-        }
-    }
-}
-
-
-authenticator = Authenticate(
-    lesDonneesDesComptes,  # Les données des comptes
-    "cookie name",         # Le nom du cookie, un str quelconque
-    "cookie key",          # La clé du cookie, un str quelconqu
-    30,                    # Le nombre de jours avant que le cookie expire
-)
-
-authenticator.login()
+# Query and display the data you inserted
+pet_owners = conn.query('select * from pet_owners')
+st.dataframe(pet_owners)

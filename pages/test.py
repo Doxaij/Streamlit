@@ -3,7 +3,11 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
+# --- AUTHENTIFICATION OBLIGATOIRE POUR AFFICHER ---
+auth_status = st.session_state.get("authentication_status")
+if not auth_status:
+    st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
+    st.stop()
 
 # Titre principal de l'application (affiché en haut de la page)
 st.title("Manipulation de données et création de graphiques")

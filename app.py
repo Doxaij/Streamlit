@@ -1,14 +1,46 @@
-# j'importe les bibliothèques
+# Module streamlit
 import streamlit as st
+import streamlit_authenticator as stauth
+from streamlit_option_menu import option_menu
+
+# bibliotheques
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import plotly.express as px
 import time
-# Importation du module
-from streamlit_option_menu import option_menu
-from streamlit_authenticator import Authenticate
 
+# Importation du module
+import yaml
+from yaml.loader import SafeLoader
+
+# d'abrod charger cela 
+with open('credentials.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+# pour que les variables config fonctionne et se réfère au fichier credentials
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days']
+)
+
+authenticator.login()
+auth_status = st.session_state.get("authentication_status")
+
+# === PORTAIL D'AUTHENTIFICATION ===
+
+if st.session_state["authentication_status"]:
+    authenticator.logout()
+    st.write(f"Bienvenue {st.session_state['name']}")
+elif st.session_state["authentication_status"] is False:
+    st.error("Nom d'utilisateur ou mot de passe incorrect")
+else:
+    st.warning("Veuillez entrer un nom d'utilisateur et un mot de passe")
+
+
+# === À PARTIR D'ICI : CONTENU RÉSERVÉ AUX UTILISATEURS CONNECTÉS ===
 st.write("Hello World")
 
 # Titre principal de l'application (affiché en haut de la page)
