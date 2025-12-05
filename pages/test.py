@@ -1,67 +1,56 @@
-import streamlit as st
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-
-# --- AUTHENTIFICATION OBLIGATOIRE POUR AFFICHER ---
-auth_status = st.session_state.get("authentication_status")
-if not auth_status:
-    st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
-    st.stop()
-
-# Titre principal de l'application (affiché en haut de la page)
+import seaborn as sns
+# j'importe les bibliothèques
+import streamlit as st
+# Titre de la page
 st.title("Manipulation de données et création de graphiques")
 
-st.write("\n\n")
-
-flights = sns.load_dataset('flights')
-iris = sns.load_dataset('iris')
-
-df_flights = pd.DataFrame(flights)
-df_iris = pd.DataFrame(iris)
-
-liste = st.selectbox("Quel dataset veux-tu utiliser",
-             ['flights','iris'])
-
-if liste == 'flights':
-    df = df_flights
-elif liste == 'iris':
-    df = df_iris
-
-st.dataframe(df)
-
-colonne_x = st.selectbox("Choisissez la colonne X",
-             ['year','month','passengers'])
-
-colonne_y = st.selectbox("Choisissez la colonne Y",
-             ['year','month','passengers'])
-
-graphique = st.selectbox("Quel graphique veux-tu utiliser",
-             ['bar_chart','scatter_chart','line_chart'])
+# Création des datasets et graphiques disponibles
+liste = ['','flights','planets','diamonds']
+liste_graph = ['','scatter_chart','line_chart','bar_chart']
 
 
+# Selection & affichage du dataset
+selection = st.selectbox("Quel dataset veux-tu utiliser ?", liste)
 
-fig, ax = plt.subplots()
+if selection !="":
+    df = sns.load_dataset(selection)
+    st.dataframe(df.head(10))
 
-if graphique == "bar_chart":
-    sns.barplot(x=colonne_x, y=colonne_y, data=df, ax=ax)
-elif graphique == "scatter_chart":
-   fig, ax = plt.subplots()
-   sns.scatterplot(x=colonne_x, y=colonne_y, data=df, ax=ax)
-#streamlit run Antho_quêtes2_streamlit.pyelif graphique == "line_chart":
-   sns.lineplot(x=colonne_x, y=colonne_y, data=df, ax=ax)
-
-st.pyplot(fig)
-
-
-case = st.checkbox("Afficher la matrice de corrélation")
-numeric_df = df_flights.select_dtypes(include='number')
-correlation = numeric_df.corr()
-
-
-if case == True :
-    fig2, ax = plt.subplots(figsize=(8,6))
-    sns.heatmap(correlation, annot=True, cmap="coolwarm", ax=ax)
-    st.pyplot(fig2)
+# Choix des x & y
+if selection !="":
+    columns = list(df.columns) # list -> garanti que la valeur reste vide par défaut, évite que ce soit la 1 col du dataset qui s'affiche
 else:
-    ""
+    columns = ['']
+col_x = st.selectbox("Choississez la colonne X",['']+columns) # [''] -> option vide au début
+col_y = st.selectbox("Choississez la colonne Y",['']+columns)
+
+# Affichage des graphiques
+graph = st.selectbox("Quel graphique veux-tu visualiser ?", liste_graph)
+if selection !="" and graph !="":
+    if graph == 'scatter_chart':
+        sns.scatterplot(x=col_x, y=col_y, data=df)
+    elif graph == 'line_chart':
+        sns.lineplot(x=col_x, y=col_y, data=df)
+    elif graph == 'bar_chart':
+        sns.barplot(x=col_x, y=col_y, data=df)
+    else:
+        liste_graph == ""
+
+    plt.xticks(rotation=45, ha='right')
+    plt.xlabel(col_x)
+    plt.ylabel(col_y)
+    st.pyplot(plt.gcf())
+
+# Affichage matrice de correlation
+matrice = st.checkbox("Afficher la matrice de corrélation")
+
+if matrice:
+    if pd.api.types.is_numeric_dtype(df[col_x]) and pd.api.types.is_numeric_dtype(df[col_y]):
+    # pd.api.types.is_numeric_dtype -> vérifie si le type de données fournies est numérique
+        df_corr = df[[col_x,col_y]].corr()
+        sns.heatmap(df_corr, cmap='cividis')
+        st.pyplot(plt.gcf())
+    else:
+        st.write("La matrice de corrélation ne fonctionne que sur des colonnes numériques")
