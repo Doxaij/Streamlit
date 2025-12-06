@@ -18,8 +18,8 @@ from yaml.loader import SafeLoader
 # Titre principal de l'application (affiché en haut de la page)
 st.title("Bienvenue")
 
-# Titre de section important (taille 1)
-st.subheader("Veuillez saisir votre identifiant et mot de passe pour accéder au contenu", width='stretch')
+# Elements textuels d'information pour la connexion
+st.markdown("Veuillez saisir votre identifiant et mot de passe pour accéder au contenu", width='stretch')
 st.text("Username: utilisateur\nPassword: 0000")
 
 # d'abord charger cela 

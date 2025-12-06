@@ -26,3 +26,7 @@ if choix == pb_liste[2]:
 if choix == pb_liste[3]:
     st.write(f'Tu as choisis: {pb_liste[3]}')
     st.image("https://www.partir-a-new-york.com/wp-content/uploads/2022/05/brooklyn-heights.jpg")
+
+if st.sidebar.button("Déconnexion"):
+    st.session_state.clear()
+    st.rerun()    

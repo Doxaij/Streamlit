@@ -17,14 +17,14 @@ if not auth_status:
 
 
 
-
-
 # Création du menu qui va afficher les choix qui se trouvent dans la variable options
 with st.sidebar:
+    st.markdown(f"Bienvenue {st.session_state['name']}") 
     selection = option_menu(
             menu_title=None,
             options = ["Accueil", "Wiki des chats", "Galerie", "Wiki du chat moderne"]
         )
+
 
 # On indique au programme quoi faire en fonction du choix
 if selection == "Accueil":

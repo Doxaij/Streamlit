@@ -120,3 +120,7 @@ if on:
         st.image("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnByNXpubms4Ym5mMmRobDU4cGhzOGZvMmhiOXEzam5kOWV2bTBkOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eoAuF3XZe84riCbE5O/giphy.gif",width='stretch')
     if liste == 'geyser':
         st.image("https://i.pinimg.com/originals/03/57/f4/0357f40e3ca8684a9ddb853498b1a7a8.gif", width="stretch" )
+
+if st.sidebar.button("Déconnexion"):
+    st.session_state.clear()
+    st.rerun()    
