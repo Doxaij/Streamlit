@@ -20,7 +20,7 @@ st.title("Bienvenue")
 
 # Elements textuels d'information pour la connexion
 st.markdown("Veuillez saisir votre identifiant et mot de passe pour accéder au contenu", width='stretch')
-st.text("Username: utilisateur\nPassword: 0000")
+st.markdown("**Username**: utilisateur\n**Password**: 0000")
 
 # d'abord charger cela 
 with open('credentials.yaml') as file:
@@ -47,3 +47,7 @@ elif st.session_state["authentication_status"] is False:
 else:
     st.warning("Veuillez entrer un nom d'utilisateur et un mot de passe")
 
+
+st.header("Bienvenue!")
+
+st.image("https://i.pinimg.com/originals/e0/2e/d5/e02ed5527f929c312bee258f686c7285.jpg", width='stretch')
