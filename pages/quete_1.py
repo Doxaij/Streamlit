@@ -7,10 +7,12 @@ if not auth_status:
     st.warning("Accès réservé. Merci de vous connecter sur la page 'app'.")
     st.stop()
 
-df = pd.read_csv(r"C:\Users\33631\Downloads\Formation\Streamlit\Partie_1\streamlit\data\taxis.csv")
+
+#____ Quete 1 ____
+df = pd.read_csv("data/taxis.csv")
 pb_liste = list(df['pickup_borough'].dropna().unique())
 
-st.title("Bienvenue sur le site web de Margie")
+st.title("Bienvenue le site des taxis de New York & arrondissements")
 choix = st.selectbox("Indiquez votre arrondissement de récupération",
              pb_liste) 
 
